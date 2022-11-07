@@ -1,15 +1,9 @@
-import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import { App } from "./app";
+import { FeatureController } from "./controllers/feature.controller";
 
 dotenv.config();
-
-const app: Express = express();
 const port = process.env.PORT;
+const app = new App([new FeatureController()], parseInt(port));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server s running on https://localhost:${port}`);
-});
+app.listen();
