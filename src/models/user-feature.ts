@@ -1,14 +1,15 @@
 import { model, Schema } from "mongoose";
 
-const featureSchema = new Schema({
+const userFeatureSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
-  featureName: {
-    type: String,
+  feature: {
+    type: Schema.Types.ObjectId,
     required: true,
+    ref: "Feature",
   },
   enable: {
     type: Boolean,
@@ -16,4 +17,4 @@ const featureSchema = new Schema({
   },
 });
 
-export const Feature = model("Feature", featureSchema);
+export const UserFeature = model("UserFeature", userFeatureSchema);

@@ -1,25 +1,21 @@
-interface requestProps {
-  email: string;
-  featureName: string;
-  enable: boolean;
-}
+import { featureRequestProps } from "../interface/create-feature.interface";
 
-export class Validation {
+export class RequestValidation {
   static isEmail(prop: string): boolean {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return prop.match(regex) ? true : false;
   }
 
-  static validateFeatureRequestProps(props: requestProps): string {
+  static featureRequest(props: featureRequestProps): string {
     let error: any = {};
 
     if (!Object.keys(props).length) {
-      error.body = "The request body cannot be empty";
+      error.body = "query params required";
     }
 
     if (Object.hasOwnProperty.call(props, "email")) {
       const { email } = props;
-      if (!Validation.isEmail(email)) {
+      if (!RequestValidation.isEmail(email)) {
         error.invalidEmail = "Provide a valid email";
       }
     }
@@ -37,7 +33,7 @@ export class Validation {
         error.invalidEnable = "enable must be a boolean";
       }
     }
-    return JSON.stringify(error);
+    return error;
   }
 
   static validUserProps(prop: { email: string }) {
@@ -48,7 +44,7 @@ export class Validation {
 
     if (Object.hasOwnProperty.call(prop, "email")) {
       const { email } = prop;
-      if (!Validation.isEmail(email)) {
+      if (!RequestValidation.isEmail(email)) {
         error.invalidEmail = "Provide a valid email";
       }
     }
