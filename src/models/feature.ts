@@ -1,6 +1,8 @@
 import { model, Schema } from "mongoose";
-
-const featureSchema = new Schema({
+export interface IFeature {
+  name: string;
+}
+const featureSchema = new Schema<IFeature>({
   name: {
     type: String,
     required: true,
