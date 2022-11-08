@@ -1,7 +1,7 @@
-import { UserFeatureService } from "./../services/feature";
+import { FeatureService } from "./../services/feature";
+import { RequestValidation } from "./../utility/request-validator";
 import * as express from "express";
-import { RequestValidation } from "../utility/request-validator";
-
+import { ICreateFeatureDTO } from "./../interface/create-feature.dto";
 export class FeatureController {
   public path = "/feature";
   public router = express.Router();
@@ -11,40 +11,23 @@ export class FeatureController {
   }
 
   public initRoutes() {
-    this.router.post(this.path, this.createUserFeature);
+    this.router.post(this.path, this.createFeature);
   }
 
-  public createUserFeature = (req: express.Request, res: express.Response) => {
+  public createFeature = (req: express.Request, res: express.Response) => {
     try {
-      const reqBody = req.body as any;
-      const error = RequestValidation.featureRequest(reqBody);
-      if (error.length) {
-        return res.status(400).json({ error: JSON.parse(error) });
+      const reqBody: ICreateFeatureDTO = req.body;
+      const error = RequestValidation.validRequest(reqBody);
+      if (Object.keys(error)) {
+        return res.status(400).json({ error });
       }
-      const feature = UserFeatureService.create(reqBody);
+      const feature = FeatureService.create(reqBody.name);
       if (!feature) {
-        return res.status(403);
+        return res.status(403).json("an error occured");
       }
-      return res.status(200);
+      return res.status(200).json(feature);
     } catch (error) {
-      console.log(error);
-    }
-  };
-
-  public getFeature = (req: express.Request, res: express.Response) => {
-    try {
-      const reqQuery = req.query as any;
-      const error = RequestValidation.featureRequest(reqQuery);
-      if (error.length) {
-        return res.status(400).json({ error: JSON.parse(error) });
-      }
-      const feature = UserFeatureService.create(reqQuery);
-      if (!feature) {
-        return res.status(403);
-      }
-      return res.status(200);
-    } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   };
 }

@@ -1,16 +1,22 @@
-import { featureRequestProps } from "../interface/create-feature.interface";
+import { ICreateUserFeatureDTO } from "../interface/create-user-feature.dto";
 
+interface IUserError {
+  body?: string;
+  invalidEmail?: string;
+}
 export class RequestValidation {
   static isEmail(prop: string): boolean {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return prop.match(regex) ? true : false;
   }
 
-  static featureRequest(props: featureRequestProps): string {
+  static validateUserFeatureRequest(
+    props: Partial<ICreateUserFeatureDTO>
+  ): string {
     let error: any = {};
 
     if (!Object.keys(props).length) {
-      error.body = "query params required";
+      error.body = "request body is required";
     }
 
     if (Object.hasOwnProperty.call(props, "email")) {
@@ -36,8 +42,8 @@ export class RequestValidation {
     return error;
   }
 
-  static validUserProps(prop: { email: string }) {
-    let error: any = {};
+  static validRequest(prop: { email?: string; name?: string }): IUserError {
+    let error: IUserError = {};
     if (!Object.keys(prop).length) {
       error.body = "The request body cannot be empty";
     }
@@ -48,5 +54,13 @@ export class RequestValidation {
         error.invalidEmail = "Provide a valid email";
       }
     }
+
+    if (Object.hasOwnProperty.call(prop, "name")) {
+      const { name } = prop;
+      if (typeof name !== "string") {
+        error.invalidEmail = "Name must be a string";
+      }
+    }
+    return error;
   }
 }

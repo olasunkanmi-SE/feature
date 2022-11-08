@@ -1,6 +1,12 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
-const userFeatureSchema = new Schema({
+export interface IUserFeature {
+  user: Types.ObjectId;
+  feature: Types.ObjectId;
+  enable: boolean;
+}
+
+const userFeatureSchema = new Schema<IUserFeature>({
   user: {
     type: Schema.Types.ObjectId,
     required: true,
