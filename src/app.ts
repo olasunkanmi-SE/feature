@@ -1,6 +1,7 @@
 import express from "express";
 import * as bodyParser from "body-parser";
 import { checkUrlParamsMiddleWare } from "./middlewares/url-params";
+import mongoose from "mongoose";
 export class App {
   public app: express.Application;
   public port: number;
@@ -8,8 +9,23 @@ export class App {
   constructor(controllers: unknown, port: number) {
     this.app = express();
     this.port = port;
+    this.connectDB();
     this.initMiddleWares();
     this.initControllers(controllers);
+  }
+
+  private connectDB() {
+    const options = {
+      autoIndex: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      family: 4,
+    };
+    mongoose
+      .connect(process.env.DBURL, options)
+      .then(() => console.log("MongoDB connected successfully"))
+      .catch((err) => console.log(err));
   }
 
   private initMiddleWares() {
