@@ -19,7 +19,7 @@ export class UserFeatureController {
   public async createUserFeature(req: express.Request, res: express.Response) {
     try {
       const reqBody = req.body as ICreateUserFeatureDTO;
-      const error = RequestValidation.validateUserFeatureRequest(reqBody);
+      const error = RequestValidation.validateCreateUserFeatureRequest(reqBody);
       if (Object.keys(JSON.parse(error)).length) {
         return res.status(400).json({ error: JSON.parse(error) });
       }
@@ -35,12 +35,13 @@ export class UserFeatureController {
     try {
       const reqQuery = req.query as Partial<ICreateUserFeatureDTO>;
       const error = RequestValidation.validateUserFeatureRequest(reqQuery);
-      if (Object.keys(error).length) {
-        return res.status(400).json(error);
+      if (Object.keys(JSON.parse(error)).length) {
+        return res.status(400).json(JSON.parse(error));
       }
       const feature: any = await UserFeatureService.getUserFeature(reqQuery);
+      console.log(feature);
       if (!feature) {
-        return res.status(403);
+        return res.status(403).json();
       }
       return res.status(200).json({ canAccess: feature.enable });
     } catch (error) {

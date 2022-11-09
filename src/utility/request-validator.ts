@@ -17,20 +17,12 @@ export class RequestValidation {
   ): string {
     let error: any = {};
 
-    if (!Object.keys(props).length) {
-      error.body = "request body is required";
-    }
-
     if (!Object.hasOwnProperty.call(props, "email")) {
       error.email = "email is required";
     }
 
     if (!Object.hasOwnProperty.call(props, "featureName")) {
       error.featureName = "featureName is required";
-    }
-
-    if (!Object.hasOwnProperty.call(props, "enable")) {
-      error.enable = "enable is required";
     }
 
     if (Object.hasOwnProperty.call(props, "email")) {
@@ -47,11 +39,28 @@ export class RequestValidation {
       }
     }
 
+    return JSON.stringify(error);
+  }
+
+  static validateCreateUserFeatureRequest(
+    props: Partial<ICreateUserFeatureDTO>
+  ) {
+    const error = JSON.parse(
+      RequestValidation.validateUserFeatureRequest(props)
+    );
+
+    if (!Object.keys(props).length) {
+      error.body = "request body is required";
+    }
+
     if (Object.hasOwnProperty.call(props, "enable")) {
       const { enable } = props;
       if (typeof enable !== "boolean") {
         error.invalidEnable = "enable must be a boolean";
       }
+    }
+    if (!Object.hasOwnProperty.call(props, "enable")) {
+      error.enable = "enable is required";
     }
     return JSON.stringify(error);
   }
