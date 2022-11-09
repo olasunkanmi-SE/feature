@@ -7,7 +7,7 @@ export class UserFeatureService {
   static async create(props: ICreateUserFeatureDTO) {
     try {
       const userFeatureExits =
-        UserFeatureService.checkIfUserFeatureExists(props);
+        await UserFeatureService.checkIfUserFeatureExists(props);
       if (userFeatureExits) {
         throw new Error("User feature already exists");
       }
@@ -30,7 +30,7 @@ export class UserFeatureService {
     const response = await UserFeatureService.getUserAndFeature(props);
     const user = response[0];
     const feature = response[1];
-    const userFeature = await UserFeature.find({
+    const userFeature = await UserFeature.findOne({
       user: user._id,
       feature: feature._id,
     });

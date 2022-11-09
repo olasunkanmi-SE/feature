@@ -3,7 +3,7 @@ import { ICreateUserFeatureDTO } from "../interface/create-user-feature.dto";
 import { UserFeatureService } from "../services/user-feature";
 import { RequestValidation } from "../utility/request-validator";
 
-export class FeatureController {
+export class UserFeatureController {
   public path = "/feature";
   public router = express.Router();
 
@@ -16,31 +16,29 @@ export class FeatureController {
     this.router.get(this.path, this.getUserFeature);
   }
 
-  public createUserFeature = (req: express.Request, res: express.Response) => {
+  public async createUserFeature(req: express.Request, res: express.Response) {
     try {
       const reqBody = req.body as ICreateUserFeatureDTO;
       const error = RequestValidation.validateUserFeatureRequest(reqBody);
-      if (error.length) {
+      if (Object.keys(JSON.parse(error)).length) {
         return res.status(400).json({ error: JSON.parse(error) });
       }
-      const feature = UserFeatureService.create(reqBody);
-      if (!feature) {
-        return res.status(403);
-      }
-      return res.status(200);
+      const feature = await UserFeatureService.create(reqBody);
+      feature ? res.status(200).json() : res.status(403).json();
+      return;
     } catch (error) {
       throw new Error(error);
     }
-  };
+  }
 
-  public getUserFeature = (req: express.Request, res: express.Response) => {
+  public async getUserFeature(req: express.Request, res: express.Response) {
     try {
       const reqQuery = req.query as Partial<ICreateUserFeatureDTO>;
       const error = RequestValidation.validateUserFeatureRequest(reqQuery);
-      if (Object.keys(error)) {
+      if (Object.keys(error).length) {
         return res.status(400).json(error);
       }
-      const feature: any = UserFeatureService.getUserFeature(reqQuery);
+      const feature: any = await UserFeatureService.getUserFeature(reqQuery);
       if (!feature) {
         return res.status(403);
       }
@@ -48,5 +46,5 @@ export class FeatureController {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 }
