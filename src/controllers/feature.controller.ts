@@ -23,9 +23,9 @@ export class FeatureController {
       }
       const feature = FeatureService.create(reqBody.name);
       if (!feature) {
-        return res.status(403);
+        return res.status(403).json("an error occured");
       }
-      return res.status(200);
+      return res.status(200).json(feature);
     } catch (error) {
       throw new Error(error);
     }

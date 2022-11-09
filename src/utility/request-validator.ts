@@ -81,7 +81,6 @@ export class RequestValidation {
         error.invalidEmail = "Provide a valid email";
       }
     }
-
     return error;
   }
 

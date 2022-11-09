@@ -1,3 +1,4 @@
+import { UserController } from "./controllers/user.controller";
 import dotenv from "dotenv";
 import { App } from "./app";
 import { FeatureController } from "./controllers/feature.controller";
