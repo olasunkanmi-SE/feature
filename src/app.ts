@@ -1,7 +1,8 @@
 import express from "express";
 import * as bodyParser from "body-parser";
-import { checkUrlParamsMiddleWare } from "./middlewares/url-params";
+import { checkUrlParamsMiddleWare } from "./middlewares/url-params.middleware";
 import mongoose from "mongoose";
+import errorMiddleware from "./middlewares/error.middleware";
 export class App {
   public app: express.Application;
   public port: number;
@@ -12,6 +13,7 @@ export class App {
     this.connectDB();
     this.initMiddleWares();
     this.initControllers(controllers);
+    this.intializeErrorHandling();
   }
 
   private connectDB() {
@@ -30,6 +32,10 @@ export class App {
 
   private initMiddleWares() {
     this.app.use(bodyParser.json());
+  }
+
+  private intializeErrorHandling() {
+    this.app.use(errorMiddleware);
     this.app.use(checkUrlParamsMiddleWare);
   }
 

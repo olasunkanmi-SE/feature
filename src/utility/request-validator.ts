@@ -45,9 +45,10 @@ export class RequestValidation {
   static validateCreateUserFeatureRequest(
     props: Partial<ICreateUserFeatureDTO>
   ) {
-    const error = JSON.parse(
-      RequestValidation.validateUserFeatureRequest(props)
-    );
+    let error: any;
+    if (RequestValidation.validateUserFeatureRequest(props).length) {
+      error = JSON.parse(RequestValidation.validateUserFeatureRequest(props));
+    }
 
     if (!Object.keys(props).length) {
       error.body = "request body is required";

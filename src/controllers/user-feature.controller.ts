@@ -1,3 +1,4 @@
+import { HttpException } from "./../exception/exception";
 import * as express from "express";
 import { ICreateUserFeatureDTO } from "../interface/create-user-feature.dto";
 import { UserFeatureService } from "../services/user-feature";
@@ -16,7 +17,11 @@ export class UserFeatureController {
     this.router.get(this.path, this.getUserFeature);
   }
 
-  public async createUserFeature(req: express.Request, res: express.Response) {
+  public async createUserFeature(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
       const reqBody = req.body as ICreateUserFeatureDTO;
       const error = RequestValidation.validateCreateUserFeatureRequest(reqBody);
@@ -24,14 +29,18 @@ export class UserFeatureController {
         return res.status(400).json({ error: JSON.parse(error) });
       }
       const feature = await UserFeatureService.create(reqBody);
-      feature ? res.status(200).json() : res.status(403).json();
+      feature ? res.status(200).json() : res.status(304).json();
       return;
     } catch (error) {
-      throw new Error(error);
+      next(error);
     }
   }
 
-  public async getUserFeature(req: express.Request, res: express.Response) {
+  public async getUserFeature(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
       const reqQuery = req.query as Partial<ICreateUserFeatureDTO>;
       const error = RequestValidation.validateUserFeatureRequest(reqQuery);
@@ -39,13 +48,9 @@ export class UserFeatureController {
         return res.status(400).json(JSON.parse(error));
       }
       const feature: any = await UserFeatureService.getUserFeature(reqQuery);
-      console.log(feature);
-      if (!feature) {
-        return res.status(403).json();
-      }
       return res.status(200).json({ canAccess: feature.enable });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }

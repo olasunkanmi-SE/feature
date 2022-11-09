@@ -13,20 +13,21 @@ export class UserController {
     this.router.post(this.path, this.createUser);
   }
 
-  public createUser = (req: express.Request, res: express.Response) => {
+  public async createUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
       const reqBody = req.body as ICreateUserDTO;
       const error = RequestValidation.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(400).json({ error });
       }
-      const user = UserService.create(reqBody.email);
-      if (!user) {
-        return res.status(403);
-      }
-      return res.status(200);
+      const user = await UserService.create(reqBody.email);
+      return res.status(200).json(user);
     } catch (error) {
-      throw new Error(error);
+      next(error);
     }
-  };
+  }
 }
