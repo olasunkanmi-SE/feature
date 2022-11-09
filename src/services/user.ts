@@ -4,9 +4,10 @@ import { IUser, User } from "../models";
 export class UserService {
   static async create(email: string) {
     try {
-      const userExists = UserService.checkUser(email);
+      const userExists = await UserService.checkUser(email);
+
       if (userExists) {
-        throw new Error("User exists");
+        throw new Error("User already exists");
       }
 
       const user: HydratedDocument<IUser> = new User({

@@ -16,15 +16,15 @@ export class UserController {
   public createUser = (req: express.Request, res: express.Response) => {
     try {
       const reqBody = req.body as ICreateUserDTO;
-      const error = RequestValidation.validRequest(reqBody);
-      if (Object.keys(error)) {
+      const error = RequestValidation.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
         return res.status(400).json({ error });
       }
       const user = UserService.create(reqBody.email);
       if (!user) {
-        return res.status(403).json("an error occured");
+        return res.status(403);
       }
-      return res.status(200).json(user);
+      return res.status(200);
     } catch (error) {
       throw new Error(error);
     }

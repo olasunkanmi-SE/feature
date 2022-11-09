@@ -5,6 +5,7 @@ export interface IFeature {
 const featureSchema = new Schema<IFeature>({
   name: {
     type: String,
+    unique: true,
     required: true,
   },
 });

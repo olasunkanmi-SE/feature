@@ -5,7 +5,8 @@ import { IFeature } from "./../models/feature";
 export class FeatureService {
   static async create(name: string) {
     try {
-      const featureExists = FeatureService.checkFeature(name);
+      const featureExists = await FeatureService.checkFeature(name);
+
       if (featureExists) {
         throw new Error("Feature exists");
       }
@@ -19,7 +20,7 @@ export class FeatureService {
   }
 
   static async checkFeature(name: string): Promise<boolean> {
-    const user: HydratedDocument<IFeature> = await Feature.findOne({ name });
-    return user ? true : false;
+    const feature: HydratedDocument<IFeature> = await Feature.findOne({ name });
+    return feature ? true : false;
   }
 }
