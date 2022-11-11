@@ -1,4 +1,3 @@
-import { HttpException } from "./../exception/exception";
 import * as express from "express";
 import { ICreateUserFeatureDTO } from "../interface/create-user-feature.dto";
 import { UserFeatureService } from "../services/user-feature";
