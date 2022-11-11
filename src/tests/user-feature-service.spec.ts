@@ -5,7 +5,6 @@ import { UserFeatureService } from "./../services/user-feature";
 import { expect } from "chai";
 import { UserFeature } from "../models";
 import { Types } from "mongoose";
-import { factory } from "typescript";
 jest.setTimeout(100000);
 describe("user feature service", () => {
   let props = {
