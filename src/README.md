@@ -1,5 +1,3 @@
-# moneylion
-
 # Assessment
 ![Screenshot 2022-11-11 at 12 57 10 PM](https://user-images.githubusercontent.com/60177090/201266576-a5c1cad5-6c38-4f43-a8b2-02f4b68d5c3a.png)
 
@@ -32,9 +30,5 @@
   ## Get a user Feature
   
   /feature?email=email@email.com&featureName=someFeatureName
-  
-  ## Start Application
-  
-  npm run start:dev
   
   
