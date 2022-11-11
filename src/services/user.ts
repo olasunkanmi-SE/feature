@@ -5,7 +5,6 @@ import { IUser, User } from "../models";
 export class UserService {
   static async create(email: string) {
     const userExists = await UserService.checkUser(email);
-    console.log("jqwebjq", userExists);
 
     if (userExists) {
       throw new HttpException(400, "User already exists");
